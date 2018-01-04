@@ -1,16 +1,15 @@
-Integrating createStore with React
-==============
+# Integrating createStore with React
 
 In this lesson, we will learn how to integrate our createStore library with our React application. By the end of the lesson you will be able to:
 
-  * Integrate the __createStore()__ function with React.
-  * Properly structure a __React & Redux__ code base.
+* Integrate the **createStore()** function with React.
+* Properly structure a **React & Redux** code base.
 
 ## Our Goal
 
 Our goal is to rebuild our counter application with the same user experience, but this time we will use React to do it. So once again, when we click on a button the count should increase.
 
-Ok, so the code for creating our store is in our `./redux-pattern.js` file. Take a look at it. Notice that it responds to events using Vanilla JavaScript.   
+Ok, so the code for creating our store is in our `./redux-pattern.js` file. Take a look at it. Notice that it responds to events using Vanilla JavaScript.
 
 ```JavaScript
 // ./redux-pattern.js
@@ -52,7 +51,6 @@ export default App;
 So now, in `./src/components/Counter.js`, we would like a button and a place where we can display the current count.
 
 ```JavaScript
-
 // ./src/components/Counter.js
 
 import React from 'react'
@@ -67,7 +65,7 @@ export default (props) => {
 };
 ```
 
-We now want to add the __Counter__ Component to to the `./src/App.js` Component and pass in the store as props.
+We now want to add the **Counter** Component to to the `./src/App.js` Component and pass in the store as props.
 
 ```JavaScript
 // ./src/App.js
@@ -88,7 +86,7 @@ class App extends Component {
 export default App;
 ```
 
-Ok, so now we should see a button on the page. Looks like the visuals for our __React__ component are complete. The next thing to do is to integrate some __Redux__.
+Ok, so now we should see a button on the page. Looks like the visuals for our **React** component are complete. The next thing to do is to integrate some **Redux**.
 
 ## Importing Redux
 
@@ -140,64 +138,63 @@ Ok, done and done. We moved our Redux code over to our new application, and we a
 
 ## Integrating Redux
 
-So this is the plan. First, we create our store by passing our reducer to the `createStore()` function. Then we can call `store.dispatch()` from a React component by passing through the store object as a prop to the needed component. Essentially, we want to call `store.dispatch({ type: 'INCREASE_COUNT' })` when we click on the button.  
+So this is the plan. First, we create our store by passing our reducer to the `createStore()` function. Then we can call `store.dispatch()` from a React component by passing through the store object as a prop to the needed component. Essentially, we want to call `store.dispatch({ type: 'INCREASE_COUNT' })` when we click on the button.
 
 So we'll do the following:
 
 1. Create the store and pass it through our React app as a prop.
 
-  We will need to import our reducer and a store and set a variable of store that calls our `createStore()` function. We also need to pass our store variable as props to our _App component_. Our `'./src/index.js'` code should now look like this:
+We will need to import our reducer and a store and set a variable of store that calls our `createStore()` function. We also need to pass our store variable as props to our _App component_. Our `'./src/index.js'` code should now look like this:
 
-  ```Javascript
-  // ./src/index.js
+```Javascript
+// ./src/index.js
 
-  import React from 'react';
-  import ReactDOM from 'react-dom';
-  import App from './App';
-  import changeCount from './reducers/changeCount';
-  import createStore from './createStore';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+import changeCount from './reducers/changeCount';
+import createStore from './createStore';
 
-  const store = createStore(changeCount);
+const store = createStore(changeCount);
 
-  export function render() {
-    ReactDOM.render(
-      <App store={store} />,
-      document.getElementById('root')
-    );
-  };
+export function render() {
+  ReactDOM.render(
+    <App store={store} />,
+    document.getElementById('root')
+  );
+};
 
-  render();
-  ```
+render();
+```
 
-  Ok, this is pretty good.  Now our app component will have access to the store, and because of this, we can call `store.dispatch({ type: 'INCREASE_COUNT' })` every time the user clicks on a button.
-
+Ok, this is pretty good. Now our app component will have access to the store, and because of this, we can call `store.dispatch({ type: 'INCREASE_COUNT' })` every time the user clicks on a button.
 
 2. Dispatch an action each time the button is clicked.
 
-	So now that we have access to the store from inside of the _Counter Component_, we can write the following.
+   So now that we have access to the store from inside of the _Counter Component_, we can write the following.
 
-  ```JavaScript
-  import React from 'react'
 
-  export default (props) => {
+```JavaScript
+import React from 'react'
 
-    const handleOnClick = () => {
-      props.store.dispatch({ type: 'INCREASE_COUNT' });
-    }
+export default (props) => {
 
-    return (
-      <div>
-        <button onClick={handleOnClick}>
-          Click Me
-        </button>
-        <div>{props.store.getState().count}</div>
-      </div>
-    )
-  };
+  const handleOnClick = () => {
+    props.store.dispatch({ type: 'INCREASE_COUNT' });
+  }
 
-  ```
+  return (
+    <div>
+      <button onClick={handleOnClick}>
+        Click Me
+      </button>
+      <div>{props.store.getState().count}</div>
+    </div>
+  )
+};
+```
 
-What does this code do? Well the button has a callback to the onClick event, and each time a button is clicked it calls our __handleOnClick()__ function. Then __handleOnClick()__ accesses the store from our props that we passed through, and dispatches an action to increase the count.
+What does this code do? Well the button has a callback to the onClick event, and each time a button is clicked it calls our **handleOnClick()** function. Then **handleOnClick()** accesses the store from our props that we passed through, and dispatches an action to increase the count.
 
 Click on the button! Ok so nothing happens. But take a look at the console. If you click on the button you should see the following.
 
@@ -205,13 +202,13 @@ the state is 1
 
 the action is INCREASE_COUNT
 
-You see that because we added a couple of console.logs in our dispatch method. So it looks like the action is being dispatched and the state is increasing. Why then is our DOM not updating?  The problem is, React never hears these updates.
+You see that because we added a couple of console.logs in our dispatch method. So it looks like the action is being dispatched and the state is increasing. Why then is our DOM not updating? The problem is, React never hears these updates.
 
-3. Tell __React__ about these updates by re-rendering
+3. Tell **React** about these updates by re-rendering
 
 Ok, so the easy way to tell React about these updates is simply to re-render the entire application. While this is a pretty non-performant practice, its fine for now. It is also fairly straightforward.
 
-Since our __ReactDom.render()__ call is wrapped in a export function called render in our `./src/index.js`, then we just need to call render from our dispatch method in createStore. So we need to do the following:
+Since our **ReactDom.render()** call is wrapped in a export function called render in our `./src/index.js`, then we just need to call render from our dispatch method in createStore. So we need to do the following:
 
 In our `./src/createStore.js` we need to import the `render()` function from our `./src/index.js` file and uncomment the `render()` function closure in the `dispatch()` function. So ultimately our `./src/createStore.js` file looks like the following.
 
