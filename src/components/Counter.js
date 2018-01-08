@@ -1,9 +1,10 @@
-import React from 'react'
+import React from "react";
 
-export default (props) => {
+export default props => {
   return (
     <div>
-      Counter Component
+      <button>Click Me</button>
+      <div>0</div>
     </div>
-  )
+  );
 };
